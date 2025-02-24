@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Workout Protocol</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="cyber-background">
+        <header class="cyber-header">
+            <h1 class="glitch-text">Workout Protocol</h1>
+            <p class="cyber-subtitle" id="muscle-group-display"></p>
+        </header>
+
+        <main class="cyber-main">
+            <section class="cyber-section hologram">
+                <div id="workout-container"></div>
+                <div class="total-time"></div>
+            </section>
+
+            <button onclick="window.location.href='index.html'" class="cyber-button">Generate New Protocol</button>
+        </main>
+
+        <footer class="cyber-footer">
+            <p class="neon-text">&copy; 2024 Cyber Gym Protocol Generator</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const muscleGroup = localStorage.getItem('selectedMuscleGroup');
+            const workoutPlan = JSON.parse(localStorage.getItem('workoutPlan'));
+            
+            // Display muscle group
+            document.getElementById('muscle-group-display').textContent = 
+                `${muscleGroup.toUpperCase()} PROTOCOL INITIALIZED`;
+
+            // Calculate total time
+            const totalTime = workoutPlan.reduce((acc, exercise) => {
+                const timeInMinutes = parseInt(exercise.time);
+                return acc + timeInMinutes;
+            }, 0);
+
+            // Generate workout HTML
+            const workoutHTML = `
+                <div class="workout-grid">
+                    <div class="exercise-header">
+                        <span>EXERCISE</span>
+                        <span>SETS</span>
+                        <span>REPS</span>
+                        <span>REST</span>
+                        <span>TIME</span>
+                    </div>
+                    ${workoutPlan.map(exercise => `
+                        <div class="exercise-row">
+                            <span>${exercise.name}</span>
+                            <span>${exercise.sets}</span>
+                            <span>${exercise.reps}</span>
+                            <span>${exercise.rest}</span>
+                            <span>${exercise.time}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="total-time">
+                    <p>Total Workout Time: ${totalTime} minutes</p>
+                    <p>Including 5 min warm-up and 5 min cool-down: ${totalTime + 10} minutes</p>
+                </div>
+            `;
+
+            document.getElementById('workout-container').innerHTML = workoutHTML;
+        });
+    </script>
+</head>
+</body>
+</html> 
